@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Element in Viewport</title>
+    <script>
+      function isAnyPartOfElementInViewport(obj) {
+        const el = obj.el;
+        if (!el) {
+          return;
+        }
+        const top = obj.top || 50;
+        const left = obj.left || 50;
+        const rect = el.getBoundingClientRect();
+
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+
+        const vertInView = rect.top - top <= windowHeight && rect.top - top + rect.height >= 0;
+        const horInView = rect.left - left <= windowWidth && rect.left - left + rect.width >= 0;
+        return vertInView && horInView;
+      }
+      const throttle = (func, limit) => {
+        let lastFunc;
+        let lastRan;
+        return function() {
+          const context = this;
+          const args = arguments;
+          if (!lastRan) {
+            func.apply(context, args);
+            lastRan = Date.now();
+          } else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(function() {
+              if (Date.now() - lastRan >= limit) {
+                func.apply(context, args);
+                lastRan = Date.now();
+              }
+            }, limit - (Date.now() - lastRan));
+          }
+        };
+      };
+    </script>
+  </head>
+  <body>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <div id="elementvp">Element in View Port</div>
+    <script>
+      window.addEventListener(
+        "scroll",
+        throttle(function() {
+          const viewport = isAnyPartOfElementInViewport({
+            el: document.getElementById("elementvp"),
+            top: 200,
+            left: 0
+          });
+          console.log(viewport);
+        }, 200)
+      );
+    </script>
+  </body>
+</html>
